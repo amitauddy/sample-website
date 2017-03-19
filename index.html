@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Pacetime Calculator</title>
+    <style>
+        table {
+            border: 1px solid grey;
+            padding: 50px;
+        }
+        
+        body {
+            background-color: #fcfcfc;
+            font-family: Arial;
+        }
+        
+        button {
+            padding: 6px;
+            text-align: center;
+        }
+        
+        tr [colspan="2"] {
+            text-align: center;
+        }
+        
+        td {
+            padding: 10px;
+        }
+        
+        .red {
+            color: red;
+        }
+        
+        input {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <h2>Pacetime Calculator</h2>
+        <form name="pacecal">
+            <table>
+                <tr>
+                    <td>TPH Goal:<span class="red">*</span></td>
+                    <td><input type="number" name="tph"></td>
+                </tr>
+                <tr>
+                    <td>Concurrent Users:<span class="red">*</span> </td>
+                    <td><input type="number" name="user"></td>
+                </tr>
+                <tr>
+                    <td>Time for 1 iteration (w/o think time sec.):<span class="red">*</span></td>
+                    <td><input type="number" name="tp1i"></td>
+                </tr>
+                <tr>
+                    <td>Think Time (sec.):</td>
+                    <td><input type="number" name="think"></td>
+                </tr>
+                <tr>
+                    <td>No of think time:</td>
+                    <td><input type="number" name="nthink"></td>
+                </tr>
+                <tr>
+                    <td>No of transaction/interation:<span class="red">*</span></td>
+                    <td><input type="number" name="tpi"></td>
+                </tr>
+                <tr>
+                    <td colspan="2">Total Pace Time: <b><span id="pacetime">xxx</span></b> sec</td>
+                </tr>
+                <!--<tr>
+                    <td colspan="2">Total Pace Time/User: <b><span id="pacetimeu">xxx</span></b> sec</td>
+                </tr>
+                <tr>
+                    <td colspan="2">Pace b/w gaps: <b><span id="pacetimeg">xxx</span></b> sec</td>
+                </tr>-->
+                <tr>
+                    <td colspan="2"><button type="button" onclick="calculate()">Calculate</button> </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><span id="error" class="red"></span></td>
+                </tr>
+            </table>
+
+        </form>
+    </center>
+</body>
+<script>
+    function calculate() {
+        var myform = document.forms['pacecal'];
+        var tph = myform['tph'].value;
+        var tp1i = myform['tp1i'].value;
+        var user = myform['user'].value;
+        var tt = myform['think'].value;
+        var ntt = myform['nthink'].value;
+        var T = myform['tpi'].value;
+        if (tph != 0 && tp1i != 0 && user != 0 && T != 0) {
+            var ans1 = document.getElementById('pacetime');
+            var ans2 = document.getElementById('pacetimeu');
+            var ans3 = document.getElementById('pacetimeg');
+            var oneUserTime = Number(tp1i) + tt * ntt;
+            var noOfTransectionInOneUserTime = user * T;
+            var totalIteration = tph / noOfTransectionInOneUserTime;
+            var pn = totalIteration;
+            var pacingTime = (3600 - (totalIteration * oneUserTime)) / pn;
+            ans1.innerHTML = (pacingTime * 1.0).toFixed(3);
+            ans2.innerHTML = (((pacingTime * 1.0) / user * 1.0) * (pn)).toFixed(3);
+            ans3.innerHTML = ((pacingTime * 1.0) / user * 1.0).toFixed(3)
+        }
+        else {
+            document.getElementById("error").innerHTML = "* marked fields are required!";
+        }
+    }
+
+</script>
+
+</html>
